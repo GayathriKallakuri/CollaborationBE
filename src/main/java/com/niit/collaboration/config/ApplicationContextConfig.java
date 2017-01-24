@@ -15,6 +15,11 @@ import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.niit.collaboration.model.Blog;
+import com.niit.collaboration.model.Event;
+import com.niit.collaboration.model.Friend;
+import com.niit.collaboration.model.Job;
+import com.niit.collaboration.model.JobApplication;
 import com.niit.collaboration.model.UserDetails;
 
 @Configuration
@@ -59,6 +64,11 @@ public class ApplicationContextConfig {
 		LocalSessionFactoryBuilder sessionBuilder = new LocalSessionFactoryBuilder(getOracleDataSource());
 		sessionBuilder.addProperties(getHibernateProperties());
 		sessionBuilder.addAnnotatedClass(UserDetails.class);
+		sessionBuilder.addAnnotatedClass(Blog.class);
+		sessionBuilder.addAnnotatedClass(Job.class);
+		sessionBuilder.addAnnotatedClass(Event.class);
+		sessionBuilder.addAnnotatedClass(Friend.class);
+		sessionBuilder.addAnnotatedClass(JobApplication.class);
 		System.out.println("Database connected");
 		return sessionBuilder.buildSessionFactory();
 

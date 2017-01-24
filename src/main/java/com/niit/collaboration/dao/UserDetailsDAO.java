@@ -7,10 +7,12 @@ import com.niit.collaboration.model.UserDetails;
 public interface UserDetailsDAO {
 	public boolean saveUser(UserDetails user);
 	public boolean updateUser(UserDetails user);
-	public boolean removeUser(String userId);
-	public UserDetails getUser(String userId);
-	public List<UserDetails> getUserList();
-	public UserDetails isValidUser(String userId, String password);
-	public boolean isUser(String userId);
-	
+	public boolean removeUser(int id);
+	public boolean delete(UserDetails user);
+	public UserDetails getUser(String id);
+	public List<UserDetails> list();
+	public UserDetails isValidUser(String id, String password);
+	public void setOffLine(String loggedInUserID);
+    public void setOnline(String loggedInUserID);
+    public boolean saveOrupdate(UserDetails user);
 }

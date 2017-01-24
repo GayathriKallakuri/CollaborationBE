@@ -6,15 +6,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.stereotype.Component;
 
 @Component
 @Entity
-@Table(name="userDetails")
-public class UserDetails {
+@Table(name="c_user")
+public class UserDetails extends BaseDomain {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private String userId;
+	private String id;
 	private String name;
 	private String email;
 	private String password;
@@ -24,11 +24,11 @@ public class UserDetails {
 	private char status;
 	private String reason;
 	private char isOnline;
-	public String getUserId() {
-		return userId;
+	public String getId() {
+		return id;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setId(String id) {
+		this.id = id;
 	}
 	public String getName() {
 		return name;
@@ -84,5 +84,7 @@ public class UserDetails {
 	public void setIsOnline(char isOnline) {
 		this.isOnline = isOnline;
 	}
+	
+	
 }
 
