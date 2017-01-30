@@ -108,14 +108,39 @@ public class JobDAOImpl implements JobDAO{
 	
 	@Transactional
 	public JobApplication getJobApplication(int id) {
+		Logger.debug("start of method getJobApplication");
+		String hql="from JobApplication where id = " + "'" + id + "'";
 		
-		return (JobApplication) sessionFactory.getCurrentSession().get(JobApplication.class, id);
+		@SuppressWarnings({ "rawtypes" })
+		Query query=sessionFactory.getCurrentSession().createQuery(hql);
+		@SuppressWarnings({ "unchecked" })
+		List<JobApplication> list=query.list();
+		if(list==null || list.isEmpty())
+		{
+			
+			return null;
+		}
+		else
+		{
+			return list.get(0);
+		}	
 	}
 
 	@Transactional
 	public JobApplication getJobApplication(String userID, int jobID) {
 		String hql = "from JobApplication where userID='"+"userID' and JobID="+jobID;
 		return (JobApplication) sessionFactory.getCurrentSession().createQuery(hql).uniqueResult();
+	}
+
+	@Transactional
+	public boolean updateJobApplication(JobApplication jobApplication) {
+		try {
+			sessionFactory.getCurrentSession().update(jobApplication);
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 }

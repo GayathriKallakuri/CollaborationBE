@@ -205,7 +205,9 @@ public class JobController {
 			jobApplication.setErrorMessage("You are not admin");
 			return jobApplication;
 		}
-		jobApplication = jobDAO.getJobApplication(userID, jobID);
+		
+		String loggenInUserID  = (String) httpsession.getAttribute("loggedInUserID");
+		jobApplication = jobDAO.getJobApplication(loggenInUserID, jobID);
 		jobApplication.setStatus(status);
 		jobApplication.setRemarks(remarks);
 		if (jobDAO.updateJob(jobApplication)) {
@@ -228,4 +230,49 @@ public class JobController {
 		}
 		return true;
 	}
+	
+	@RequestMapping(value="/jobaccept/{id}" , method = RequestMethod.PUT)
+	   public  ResponseEntity<JobApplication> jobaccept(@PathVariable("id") int id, @RequestBody JobApplication jobApplication ) 
+	   {
+		log.debug("Start of method jobaccept");
+		 jobApplication = jobDAO.getJobApplication(jobApplication.getId()); 
+		 System.out.println(jobApplication);
+		 
+		  if(jobApplication==null)
+		  {
+			 
+			  jobApplication = new JobApplication();
+			  jobApplication.setErrorMessage("User does not exist with id "+ jobApplication.getId());
+			   return new ResponseEntity<JobApplication>(jobApplication, HttpStatus.NOT_FOUND);
+		  }
+		  
+		  jobApplication.setStatus('A');
+		  jobApplication.setRemarks("Approved");
+		  jobDAO.updateJobApplication(jobApplication); 
+		  
+		   
+		   return new ResponseEntity<JobApplication>(jobApplication, HttpStatus.OK);
+	   }
+	
+	
+	@RequestMapping(value="/jobreject/{id}" , method = RequestMethod.PUT)
+	   public  ResponseEntity<JobApplication> jobreject(@PathVariable("id") int id, @RequestBody JobApplication jobApplication ) 
+	   {
+		 jobApplication = jobDAO.getJobApplication(jobApplication.getId());  
+		 
+		  if(jobApplication==null)
+		  {
+			 
+			  jobApplication = new JobApplication();
+			  jobApplication.setErrorMessage("User does not exist with id "+ jobApplication.getId());
+			   return new ResponseEntity<JobApplication>(jobApplication, HttpStatus.NOT_FOUND);
+		  }
+		  
+		  jobApplication.setStatus('R');
+		  jobApplication.setRemarks("Not approved");
+		  jobDAO.updateJobApplication(jobApplication); 
+		  
+		   
+		   return new ResponseEntity<JobApplication>(jobApplication, HttpStatus.OK);
+	   }
 }

@@ -26,4 +26,6 @@ public interface JobDAO {
 	public JobApplication getJobApplication(int id);
 
 	public JobApplication getJobApplication(String userID, int jobID);
+
+	public boolean updateJobApplication(JobApplication jobApplication);
 }

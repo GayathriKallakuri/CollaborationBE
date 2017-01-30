@@ -137,7 +137,7 @@ public class UserController {
 		return new ResponseEntity<UserDetails>(user, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/accept/{id}", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/accept/{id}", method = RequestMethod.GET)
 	public ResponseEntity<UserDetails> accept(@PathVariable("id") String id) {
 		Logger.debug("Starting of the method accept");
 
@@ -145,9 +145,9 @@ public class UserController {
 		Logger.debug("Ending of the method accept");
 		return new ResponseEntity<UserDetails>(user, HttpStatus.OK);
 
-	}
+	}*/
 
-	@RequestMapping(value = "/reject/{id}/{reason}", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/reject/{id}/{reason}", method = RequestMethod.GET)
 	public ResponseEntity<UserDetails> reject(@PathVariable("id") String id, @PathVariable("reason") String reason) {
 		Logger.debug("Starting of the method reject");
 
@@ -155,9 +155,52 @@ public class UserController {
 		Logger.debug("Ending of the method reject");
 		return new ResponseEntity<UserDetails>(user, HttpStatus.OK);
 
-	}
+	}*/
+	
+	@RequestMapping(value="/useraccept/{id}" , method = RequestMethod.PUT)
+	   public  ResponseEntity<UserDetails> useraccept(@PathVariable("id") String id, @RequestBody UserDetails user ) 
+	   {
+		Logger.debug("Starting of the method accept");
+		  user = userDAO.getUser(user.getId());
+		  if(user==null)
+		  {
+			Logger.debug("->->->->User does not exist with id "+ user.getId());
+			   user = new UserDetails();
+			   user.setErrorMessage("User does not exist with id "+ user.getId());
+			   return new ResponseEntity<UserDetails>(user, HttpStatus.NOT_FOUND);
+		  }
+		  else{
+		  Logger.debug("Setting status to :");
+		   user.setStatus('A');
+		   user.setReason("Approved");
+		   userDAO.updateUser(user);
+		  }
+		   return new ResponseEntity<UserDetails>(user, HttpStatus.OK);
+	   }
+	  
 
-	private UserDetails updateStatus(String id, char status, String reason) {
+	   
+	   @RequestMapping(value="/userreject/{id}" , method = RequestMethod.PUT)
+	   public  ResponseEntity<UserDetails> userreject(@PathVariable("id") String id, @RequestBody UserDetails user ) 
+	   {
+		   Logger.debug("Starting of the method reject");
+		  user = userDAO.getUser(user.getId());
+		  if(user==null)
+		  {
+			  Logger.debug("->->->->User does not exist with id "+ user.getId());
+			   user = new UserDetails();
+			   user.setErrorMessage("User does not exist with id "+ user.getId());
+			   return new ResponseEntity<UserDetails>(user, HttpStatus.NOT_FOUND);
+		  }
+		  
+		   user.setStatus('R');
+		   
+		   userDAO.updateUser(user);
+		   
+		   return new ResponseEntity<UserDetails>(user, HttpStatus.OK);
+	   }
+
+	/*private UserDetails updateStatus(String id, char status, String reason) {
 		Logger.debug("Starting of the method updateStatus");
 
 		Logger.debug("status: " + status);
@@ -180,5 +223,5 @@ public class UserController {
 		Logger.debug("Ending of the method updateStatus");
 		return user;
 
-	}
+	}*/
 }

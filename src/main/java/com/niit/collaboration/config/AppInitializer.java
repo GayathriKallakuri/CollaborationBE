@@ -8,12 +8,12 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	@Override
 	protected Class[] getRootConfigClasses() {
 		logger.debug("start of method config classes");
-		return new Class[]{AppConfig.class};
+		return new Class[]{AppConfig.class,WebSocketConfig.class};
 	}
 	@Override
 	protected Class[] getServletConfigClasses() {
 		logger.debug("start of method servlet config");
-		return null;
+		return new Class[] {AppConfig.class, WebSocketConfig.class};
 	}
 	@Override
 	protected String[] getServletMappings() {

@@ -59,7 +59,7 @@ public class UserDAOImpl implements UserDetailsDAO {
 	public boolean updateUser(UserDetails user) {
 		try
 		{
-			sessionFactory.openSession() .update(user);
+			sessionFactory.getCurrentSession() .update(user);
 			return true;
 		}
 		catch(HibernateException e)

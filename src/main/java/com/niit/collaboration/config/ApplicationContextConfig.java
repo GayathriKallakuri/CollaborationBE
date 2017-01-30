@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.niit.collaboration.model.Blog;
+import com.niit.collaboration.model.ChatForum;
 import com.niit.collaboration.model.Event;
 import com.niit.collaboration.model.Friend;
 import com.niit.collaboration.model.Job;
@@ -69,6 +70,7 @@ public class ApplicationContextConfig {
 		sessionBuilder.addAnnotatedClass(Event.class);
 		sessionBuilder.addAnnotatedClass(Friend.class);
 		sessionBuilder.addAnnotatedClass(JobApplication.class);
+		sessionBuilder.addAnnotatedClass(ChatForum.class);
 		System.out.println("Database connected");
 		return sessionBuilder.buildSessionFactory();
 

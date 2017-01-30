@@ -12,22 +12,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mysql.cj.api.log.Log;
 import com.niit.collaboration.dao.FriendDAO;
 import com.niit.collaboration.model.Friend;
 
 @Repository("friendDAO")
 public class FriendDAOImpl implements FriendDAO {
+	
 	private static final org.slf4j.Logger Logger = LoggerFactory.getLogger(UserDAOImpl.class);
 	
 	private static final Friend Friend = null;
+	
 	@Autowired
-	SessionFactory sessionFactory;
+	private SessionFactory sessionFactory;
 
 	private Friend friend;
 
 	public FriendDAOImpl(SessionFactory sessionFactory) {
+		try{
 		this.sessionFactory = sessionFactory;
+		}
+		catch(Exception e){
+			Logger.error("Unable to connet to database");
+			e.printStackTrace();
+		}
 	}
+ 
 
 	public FriendDAOImpl() {
 
@@ -35,14 +45,29 @@ public class FriendDAOImpl implements FriendDAO {
 
 	@Transactional
 	public List<com.niit.collaboration.model.Friend> getMyFriend(String userID) {
-		// TODO Auto-generated method stub
-		return null;
+		String hql1 = "select friendID from Friend where userID='"+userID+"' and status='"+"A'";
+		            
+		 String hql2= "select userID from Friend where friendID='"+userID+"' and status='"+"A'";
+		             
+		Logger.debug("getMyFriends hql1:"+hql1);
+		Logger.debug("getMyFriends hql2:"+hql2);
+		Query query1 = sessionFactory.openSession().createQuery(hql1);
+		Query query2 = sessionFactory.openSession().createQuery(hql2);
+		List<Friend> list1 =(List<Friend>)query1.list();
+		List<Friend> list2 =(List<Friend>)query2.list();
+		
+		list1.addAll(list2);
+		
+		return list1;
 	}
 
 	@Transactional
 	public com.niit.collaboration.model.Friend get(String userID, String friendID) {
-		// TODO Auto-generated method stub
-		return null;
+		String hql = "from Friend where userID=" + "'" + userID + "' and friendID = '" + friendID +"'";
+		Logger.debug("hql:"+hql);
+		Query query = sessionFactory.openSession().createQuery(hql);
+		return (com.niit.collaboration.model.Friend) query.uniqueResult();
+		
 	}
 
 	@Transactional
@@ -58,10 +83,12 @@ public class FriendDAOImpl implements FriendDAO {
 	@Transactional
 	public boolean save(com.niit.collaboration.model.Friend friend) {
 		try{
+			Logger.debug("Start of method to save friend");
 			  sessionFactory.getCurrentSession().save(friend);
 		return true;
 			}catch (Exception e ){
 				e.printStackTrace();
+				Logger.debug("End of method to save friend");
 				return false;
 			}
 	}
@@ -69,11 +96,12 @@ public class FriendDAOImpl implements FriendDAO {
 	@Transactional
 	public boolean update(com.niit.collaboration.model.Friend friend) {
 		try{
+			Logger.debug("Start of method to update friend");
 			sessionFactory.getCurrentSession().update(friend);
 	return true;
 		} catch (Exception e){
-			//TODO Auto-generated catch block
 	       e.printStackTrace();
+	       Logger.debug("End of method to update friend");
 	       return false;
 		}
 	}
@@ -88,14 +116,22 @@ public class FriendDAOImpl implements FriendDAO {
 	}
 
 	@Transactional
-	public List<com.niit.collaboration.model.Friend> getNewFriendRequests(String userID) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<com.niit.collaboration.model.Friend> getMyFriendRequests(String userID) {
+		Logger.debug("Start of method getNewFriendRequests");
+		Logger.debug(userID);
+		String hql = "from Friend where friendID=" + "'" + userID + "' and status = '" + "N'";
+		
+		Logger.debug(hql);
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		Logger.debug("hiiiiiiiiii");
+		List<Friend> list = (List<Friend>) query.list();
+		System.out.println(list);
+		return list;
 	}
 
 	@Transactional
 	public void setOnline(String loggedInUserID) {
-		Logger.debug("Starting of the method setOnline");
+		Logger.debug("Starting of the method setOnline"); 
 		String hql = "UPDATE Friend SET isOnline = 'Y' where userID ='" + loggedInUserID + "'";
 		Logger.debug("hql: " + hql);
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
@@ -113,5 +149,16 @@ public class FriendDAOImpl implements FriendDAO {
 		query.executeUpdate();
 		Logger.debug("Ending of the method setOffline");
 		
+	}
+	
+
+
+	@Transactional
+	public List<com.niit.collaboration.model.Friend> getRequestsSentByMe(String userID) {
+		String hql = "select friendID from Friend where userID=" + "'" + userID + "' and status='"+"N'";
+		Logger.debug(hql);
+		Query query = sessionFactory.openSession().createQuery(hql);
+		List<Friend> list = (List<Friend>) query.list();
+		return list;
 	}
 }
