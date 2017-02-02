@@ -45,6 +45,7 @@ public class FriendDAOImpl implements FriendDAO {
 
 	@Transactional
 	public List<com.niit.collaboration.model.Friend> getMyFriend(String userID) {
+		Logger.debug("Start of method getMyFriend of user"+userID);
 		String hql1 = "select friendID from Friend where userID='"+userID+"' and status='"+"A'";
 		            
 		 String hql2= "select userID from Friend where friendID='"+userID+"' and status='"+"A'";
@@ -57,7 +58,8 @@ public class FriendDAOImpl implements FriendDAO {
 		List<Friend> list2 =(List<Friend>)query2.list();
 		
 		list1.addAll(list2);
-		
+		System.out.println(list1);;
+		Logger.debug("End of method getMyFriend of user"+userID);
 		return list1;
 	}
 
@@ -71,12 +73,16 @@ public class FriendDAOImpl implements FriendDAO {
 	}
 
 	@Transactional
-	public com.niit.collaboration.model.Friend get(int friendID) {
+	public com.niit.collaboration.model.Friend get(int id) {
+		Logger.debug("Start of method to get friend id:"+id);
 		Session session=sessionFactory.getCurrentSession();
+		System.out.println("opened the session");
 		Criteria ct=session.createCriteria(Friend.class);
-		ct.add(Restrictions.eq("friendID",friendID));
-		System.out.println(friendID);
+		System.out.println("opened the criteria");
+		ct.add(Restrictions.eq("id",id));
+		System.out.println(id);
 		Friend f = (com.niit.collaboration.model.Friend) ct.uniqueResult();
+		Logger.debug("End of method to get friend id");
 		return f;	
 	}
 

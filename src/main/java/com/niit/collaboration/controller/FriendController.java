@@ -106,12 +106,12 @@ public class FriendController {
 		return new ResponseEntity<Friend>(friend,HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/acceptFriend/{friendID}",method=RequestMethod.GET)
+	/*@RequestMapping(value="/acceptFriend/{friendID}",method=RequestMethod.GET)
 	public ResponseEntity<Friend> acceptFriendRequest(@PathVariable("friendID")String friendID){
 		Logger.debug("calling method acceptFriendRequest");
 		friend = updateRequest(friendID,"A");
 		return new ResponseEntity<Friend>(friend,HttpStatus.OK);
-	}
+	}*/
 	
 	private Friend updateRequest(String friendID, String status){
 		Logger.debug("Start of method updateRequest");
@@ -138,9 +138,11 @@ public class FriendController {
 	}
 	
 	 @RequestMapping(value="/friendaccept/{id}" , method = RequestMethod.PUT)
-	   public  ResponseEntity<Friend> friendaccept(@PathVariable("id") String id, @RequestBody Friend friend ) 
+	   public  ResponseEntity<Friend> friendaccept(@PathVariable("id") int id, @RequestBody Friend friend ) 
 	   {
+		 Logger.debug("Start of method friendaccept:"+id);
 		   friend = friendDAO.get(friend.getId());
+		   System.out.println(friend);
 		
 		  if(friend==null)
 		  {
@@ -153,13 +155,14 @@ public class FriendController {
 		  friend.setStatus("A");
 		   
 		  friendDAO.update(friend);
-		   
+		   Logger.debug("End of method friendaccept");
 		   return new ResponseEntity<Friend>(friend, HttpStatus.OK);
 	   }
 	
 	 @RequestMapping(value="/friendreject/{id}" , method = RequestMethod.PUT)
-	   public  ResponseEntity<Friend> friendreject(@PathVariable("id") String id, @RequestBody Friend friend ) 
+	   public  ResponseEntity<Friend> friendreject(@PathVariable("id") int id, @RequestBody Friend friend ) 
 	   {
+		 Logger.debug("Start of method friendreject:"+id);
 		   friend = friendDAO.get(friend.getId());
 		
 		  if(friend==null)
@@ -173,7 +176,7 @@ public class FriendController {
 		  friend.setStatus("R");
 		   
 		  friendDAO.update(friend);
-		   
+		  Logger.debug("end of method friendreject:"+id);
 		   return new ResponseEntity<Friend>(friend, HttpStatus.OK);
 	   }
 	

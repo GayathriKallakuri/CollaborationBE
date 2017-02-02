@@ -121,10 +121,10 @@ public class UserController {
 		
 		   }
 
-	@RequestMapping(value = "/userUpdate/", method = RequestMethod.PUT)
-	public ResponseEntity<UserDetails> updateUser(@RequestBody UserDetails user) {
+	@RequestMapping(value = "/userUpdate/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<UserDetails> updateUser(@PathVariable("id") String id,@RequestBody UserDetails user) {
 		Logger.debug("->->->->calling method updateUser");
-		if (userDAO.getUser(user.getId()) == null) {
+		if (userDAO.getUser(id) == null) {
 			Logger.debug("->->->->User does not exist with id " + user.getId());
 			user = new UserDetails(); // ?
 			user.setErrorCode("404");
