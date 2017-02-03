@@ -21,7 +21,7 @@ public OutputMessage sendMessage(Message message){
 	log.debug("Start of method sendMessage");
 	log.debug("Message:"+message.getMessage());
 	log.debug("MessageID:"+message.getId());
-	
+
 	return new OutputMessage(message,new Date());
 }
 }

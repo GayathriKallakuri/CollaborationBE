@@ -46,9 +46,9 @@ public class FriendDAOImpl implements FriendDAO {
 	@Transactional
 	public List<com.niit.collaboration.model.Friend> getMyFriend(String userID) {
 		Logger.debug("Start of method getMyFriend of user"+userID);
-		String hql1 = "select friendID from Friend where userID='"+userID+"' and status='"+"A'";
+		String hql1 = "from Friend where userID='"+userID+"' and status='"+"A'";
 		            
-		 String hql2= "select userID from Friend where friendID='"+userID+"' and status='"+"A'";
+		 String hql2= "from Friend where friendID='"+userID+"' and status='"+"A'";
 		             
 		Logger.debug("getMyFriends hql1:"+hql1);
 		Logger.debug("getMyFriends hql2:"+hql2);
@@ -161,7 +161,7 @@ public class FriendDAOImpl implements FriendDAO {
 
 	@Transactional
 	public List<com.niit.collaboration.model.Friend> getRequestsSentByMe(String userID) {
-		String hql = "select friendID from Friend where userID=" + "'" + userID + "' and status='"+"N'";
+		String hql = "from Friend where userID=" + "'" + userID + "' and status='"+"N'";
 		Logger.debug(hql);
 		Query query = sessionFactory.openSession().createQuery(hql);
 		List<Friend> list = (List<Friend>) query.list();
